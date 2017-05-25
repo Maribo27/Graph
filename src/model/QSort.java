@@ -9,25 +9,21 @@ class QSort {
 
     private Vector<Integer> array = new Vector<>();
 
-
     QSort(Vector<Integer> array){
         this.array = array;
-        int left = 0;
-        int right = array.size() - 1;
     }
 
-    private void sort(int left, int right){
+    void sort(int left, int right){
 
         int leftCounter = left,
                 rightCounter = right,
                 tmp;
-
-        int pivot = this.array.elementAt(((left + right) / 2));
+        int centerValue = this.array.elementAt(((left + right) / 2));
 
         while (leftCounter <= rightCounter) {
-            while (this.array.elementAt(leftCounter) < pivot)
+            while (this.array.elementAt(leftCounter) < centerValue)
                 leftCounter++;
-            while (this.array.elementAt(rightCounter) > pivot)
+            while (this.array.elementAt(rightCounter) > centerValue)
                 rightCounter--;
             if (leftCounter <= rightCounter) {
                 tmp = this.array.elementAt(leftCounter);
@@ -42,10 +38,5 @@ class QSort {
             sort(left, rightCounter);
         if (right < leftCounter)
             sort(leftCounter,right);
-    }
-
-    Vector<Integer> getNewArray(){
-        sort(0, array.size() - 1);
-        return array;
     }
 }
