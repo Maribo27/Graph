@@ -1,7 +1,6 @@
 package view;
 import controller.GraphicPanel;
 import model.GenerateMassive;
-import model.TimeArray;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,7 +49,7 @@ class Interface {
     }
 
 
-    private JPanel addParameterPanel(){
+    JPanel addParameterPanel(){
         JPanel parameterPanel = new JPanel();
         parameterPanel.setMaximumSize(new Dimension(600,100));
         parameterPanel.setLayout(new GridLayout(4,2));
@@ -85,11 +84,8 @@ class Interface {
                     zoom = Integer.parseInt(checkZoom),
                     step  = Integer.parseInt(checkStep);
 
-
-
             GenerateMassive newMass = new GenerateMassive(numberOfArrays, step);
-            TimeArray timeArray = new TimeArray();
-            tempMass = timeArray.returnTime();
+            tempMass = newMass.returnTime();
 
             mainPanel.remove(table.getTable());
             table = new Table();
