@@ -1,4 +1,5 @@
 package view;
+
 import controller.GraphicPanel;
 import model.GenerateMassive;
 
@@ -20,9 +21,9 @@ class Interface {
     private GraphicPanel graphicPanel;
 
 
-    void runProgram(){
+    void runProgram() {
         mainWindow.setLayout(new BorderLayout());
-        mainWindow.setPreferredSize(new Dimension(800,600));
+        mainWindow.setPreferredSize(new Dimension(800, 600));
         mainWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainWindow.pack();
         mainWindow.setResizable(false);
@@ -49,10 +50,10 @@ class Interface {
     }
 
 
-    JPanel addParameterPanel(){
+    private JPanel addParameterPanel() {
         JPanel parameterPanel = new JPanel();
-        parameterPanel.setMaximumSize(new Dimension(600,100));
-        parameterPanel.setLayout(new GridLayout(4,2));
+        parameterPanel.setMaximumSize(new Dimension(600, 100));
+        parameterPanel.setLayout(new GridLayout(4, 2));
 
         JLabel labelZoom = new JLabel("Кратность масштаба");
         JTextField textFieldZoom = new JTextField();
@@ -67,11 +68,10 @@ class Interface {
         buildButton.addActionListener((ActionEvent e) -> {
             String checkNumber = textFieldNumber.getText(),
                     checkZoom = textFieldZoom.getText(),
-                    checkStep  = textFieldShag.getText();
+                    checkStep = textFieldShag.getText();
 
-            if (checkNumber.matches("\\D+") || checkZoom.matches("\\D+") || checkStep .matches("\\D+")
-                    || (Integer.parseInt(checkNumber) <= Integer.parseInt(checkStep )) || (Integer.parseInt(checkStep ) < 2))
-            {
+            if (checkNumber.matches("\\D+") || checkZoom.matches("\\D+") || checkStep.matches("\\D+")
+                    || (Integer.parseInt(checkNumber) <= Integer.parseInt(checkStep)) || (Integer.parseInt(checkStep) < 2)) {
                 JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Введены некорректные данные", "Ошибка",
                         JOptionPane.WARNING_MESSAGE);
                 textFieldNumber.setText("");
@@ -82,7 +82,7 @@ class Interface {
 
             int numberOfArrays = Integer.parseInt(checkNumber),
                     zoom = Integer.parseInt(checkZoom),
-                    step  = Integer.parseInt(checkStep);
+                    step = Integer.parseInt(checkStep);
 
             GenerateMassive newMass = new GenerateMassive(numberOfArrays, step);
             tempMass = newMass.returnTime();

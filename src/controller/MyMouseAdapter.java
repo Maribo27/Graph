@@ -9,10 +9,10 @@ import java.awt.event.MouseEvent;
  */
 public class MyMouseAdapter extends MouseAdapter {
 
-    int prevX, prevY;
-    JScrollPane scrolls;
+    private int prevX, prevY;
+    private JScrollPane scrolls;
 
-    public MyMouseAdapter(JScrollPane scrolls) {
+    MyMouseAdapter(JScrollPane scrolls) {
         this.scrolls = scrolls;
     }
 

@@ -9,11 +9,11 @@ class QSort {
 
     private Vector<Integer> array = new Vector<>();
 
-    QSort(Vector<Integer> array){
+    QSort(Vector<Integer> array) {
         this.array = array;
     }
 
-    void sort(int left, int right){
+    void sort(int left, int right) {
 
         int leftCounter = left,
                 rightCounter = right,
@@ -37,6 +37,6 @@ class QSort {
         if (left < rightCounter)
             sort(left, rightCounter);
         if (right < leftCounter)
-            sort(leftCounter,right);
+            sort(leftCounter, right);
     }
 }
