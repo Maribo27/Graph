@@ -1,44 +1,43 @@
 package view;
 
-import controller.GraphicPanel;
-import model.GenerateMassive;
+import controller.Controller;
+import model.SortingTime;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.Vector;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by Maria on 22.05.2017.
  */
-class Interface {
+public class Interface {
 
     private JFrame mainWindow = new JFrame("Лабораторная работа #3");
     private JPanel mainPanel = new JPanel();
     private Vector<Vector<Integer>> tempMass = new Vector<>();
-    private Table table = new Table();
+    private Table table;
     private JPanel graphic = new JPanel();
     private GraphicPanel graphicPanel;
+    private Controller controller;
 
+    Interface(Controller controller){
+        this.controller = controller;
+    }
 
     void runProgram() {
-        mainWindow.setLayout(new BorderLayout());
-        mainWindow.setPreferredSize(new Dimension(800, 600));
-        mainWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        mainWindow.pack();
-        mainWindow.setResizable(false);
-        mainWindow.setEnabled(true);
+
+        initMainFrame();
 
         mainPanel.setLayout(new BorderLayout());
+        table = new Table(new ArrayList<>());
         table.createTable();
 
         mainPanel.add(table.getTable(), BorderLayout.WEST);
         mainPanel.add(addParameterPanel(), BorderLayout.SOUTH);
 
-        tempMass.add(new Vector<>());
-        tempMass.add(new Vector<>());
-
-        graphicPanel = new GraphicPanel(10, tempMass, 200);
+        graphicPanel = new GraphicPanel(10, new ArrayList<>(), 200);
 
         graphic = graphicPanel.getPanel();
         mainPanel.add(graphic);
@@ -48,7 +47,6 @@ class Interface {
         mainWindow.setVisible(true);
         mainWindow.setLocationRelativeTo(null);
     }
-
 
     private JPanel addParameterPanel() {
         JPanel parameterPanel = new JPanel();
@@ -70,8 +68,10 @@ class Interface {
                     checkZoom = textFieldZoom.getText(),
                     checkStep = textFieldShag.getText();
 
-            if (checkNumber.matches("\\D+") || checkZoom.matches("\\D+") || checkStep.matches("\\D+")
-                    || (Integer.parseInt(checkNumber) <= Integer.parseInt(checkStep)) || (Integer.parseInt(checkStep) < 2)) {
+            boolean validating = checkNumber.matches("\\D+") || checkZoom.matches("\\D+") || checkStep.matches("\\D+")
+                    || (Integer.parseInt(checkNumber) <= Integer.parseInt(checkStep)) || (Integer.parseInt(checkStep) < 2);
+
+            if (validating) {
                 JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Введены некорректные данные", "Ошибка",
                         JOptionPane.WARNING_MESSAGE);
                 textFieldNumber.setText("");
@@ -84,29 +84,20 @@ class Interface {
                     zoom = Integer.parseInt(checkZoom),
                     step = Integer.parseInt(checkStep);
 
-            GenerateMassive newMass = new GenerateMassive(numberOfArrays, step);
-            tempMass = newMass.returnTime();
+            controller.generateMassive(numberOfArrays,step);
 
             mainPanel.remove(table.getTable());
-            table = new Table();
+            table.changeData(controller.getModel().getTimes());
             table.updateTable();
             mainPanel.add(table.getTable(), BorderLayout.WEST);
-
-            for (int countPairs = 0; countPairs < tempMass.elementAt(0).size(); countPairs++) {
-                Vector<Integer> str = new Vector<>(2);
-                str.add(tempMass.elementAt(0).elementAt(countPairs));
-                str.add(tempMass.elementAt(1).elementAt(countPairs));
-                table.addRow(str);
-            }
             mainPanel.remove(graphic);
-            graphicPanel = new GraphicPanel(zoom, tempMass, numberOfArrays);
+            graphicPanel = new GraphicPanel(zoom, controller.getModel().getTimes(), numberOfArrays);
             graphic = graphicPanel.getPanel();
             mainPanel.add(graphic);
 
             table.updateTable();
 
-            mainWindow.repaint();
-            mainWindow.revalidate();
+            updateMainFrame();
         });
 
         parameterPanel.add(labelZoom);
@@ -118,5 +109,19 @@ class Interface {
         parameterPanel.add(buildButton);
 
         return parameterPanel;
+    }
+
+    public void updateMainFrame(){
+        mainWindow.repaint();
+        mainWindow.revalidate();
+    }
+
+    void initMainFrame(){
+        mainWindow.setLayout(new BorderLayout());
+        mainWindow.setPreferredSize(new Dimension(800, 600));
+        mainWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        mainWindow.pack();
+        mainWindow.setResizable(false);
+        mainWindow.setEnabled(true);
     }
 }

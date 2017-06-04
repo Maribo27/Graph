@@ -1,18 +1,20 @@
 package controller;
 
 import javax.swing.*;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * Created by konstantin on 13.04.16.
+ * Created by Maria on 23.05.2017.
  */
 public class MyMouseAdapter extends MouseAdapter {
 
     private int prevX, prevY;
     private JScrollPane scrolls;
 
-    MyMouseAdapter(JScrollPane scrolls) {
+    public MyMouseAdapter(JScrollPane scrolls) {
         this.scrolls = scrolls;
     }
 
@@ -23,6 +25,14 @@ public class MyMouseAdapter extends MouseAdapter {
         int dY = prevY - e.getY();
 
         JScrollBar verticalScrollBar = scrolls.getVerticalScrollBar();
+
+        verticalScrollBar.addAdjustmentListener(new AdjustmentListener() {
+            @Override
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                System.out.println("test");
+            }
+        });
+
         JScrollBar horizontalScrollBar = scrolls.getHorizontalScrollBar();
         verticalScrollBar.setValue(verticalScrollBar.getValue() + dY);
         horizontalScrollBar.setValue(horizontalScrollBar.getValue() + dX);

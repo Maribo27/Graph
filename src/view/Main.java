@@ -1,5 +1,7 @@
 package view;
 
+import controller.Controller;
+
 import javax.swing.*;
 
 /**
@@ -19,7 +21,8 @@ public class Main {
             System.err.println("Couldn't get specified look and feel, for some reason.");
         }
 
-        Interface program = new Interface();
+        Controller controller = new Controller();
+        Interface program = new Interface(controller);
         program.runProgram();
     }
 }
