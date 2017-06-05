@@ -103,7 +103,7 @@ public class Interface {
         mainWindow.revalidate();
     }
 
-    void initMainFrame(){
+    private void initMainFrame(){
         mainWindow.setLayout(new BorderLayout());
         mainWindow.setPreferredSize(new Dimension(800, 600));
         mainWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

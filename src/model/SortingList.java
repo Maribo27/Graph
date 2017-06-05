@@ -1,7 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Maria on 25.05.2017.
@@ -13,15 +12,11 @@ public class SortingList {
         timeOfSorting = new ArrayList();
     }
 
-    public void addTime(SortingTime sortingTime) {
-        timeOfSorting.add(sortingTime);
-    }
-
     public void setTimes(List<SortingTime> timeList) {
         this.timeOfSorting = timeList;
     }
 
-    public List<SortingTime> getTimes() {
+    public List getTimes() {
         return timeOfSorting;
     }
 

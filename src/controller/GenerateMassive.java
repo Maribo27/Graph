@@ -22,7 +22,7 @@ class GenerateMassive extends Thread {
     @Override
     public void run(){
         int ceil = ((int) Math.ceil(maxNumberOfElements / step));
-        for (int countMassive = 0; countMassive <= ceil; countMassive++) {
+        for (int countMassive = 0; countMassive < ceil; countMassive++) {
             try {
                 Thread.sleep(300);
             } catch (InterruptedException e) {
