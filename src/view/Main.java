@@ -22,7 +22,8 @@ public class Main {
         }
 
         Controller controller = new Controller();
-        Interface program = new Interface(controller);
-        program.runProgram();
+        controller.runProgram();
     }
+
+
 }

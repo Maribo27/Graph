@@ -17,14 +17,22 @@ import static view.Const.BORDER_UP;
 public class GraphicPanel extends JPanel {
 
     private int zoom, lastX, lastY, countOfSegments, countOfSegmentsY;
-    private int SEGMENT = 40;
-    private int segX, segY;
+    private int segX, segY, coefY = 200;
     private List<SortingTime> points;
 
-    public GraphicPanel(int zoom, List<SortingTime> points, int numberOfArrays) {
+    GraphicPanel(int zoom, List<SortingTime> points, int numberOfArrays) {
 
         this.zoom = zoom;
         this.points = points;
+
+        if (numberOfArrays <= 100)
+            coefY = 1;
+        else if (numberOfArrays <= 1000)
+            coefY = 5;
+        else if (numberOfArrays <= 10000)
+            coefY = 25;
+        else if (numberOfArrays <= 100000)
+            coefY = 100;
 
         countOfSegments = (int) Math.ceil(numberOfArrays / this.zoom) + 1;
 
@@ -34,20 +42,20 @@ public class GraphicPanel extends JPanel {
         setPreferredSize(new Dimension(620, 448));
         setSize(new Dimension(620, 448));
 
-        segX = (int) Math.ceil(getWidth() - BORDER_UP - BORDER) / countOfSegments + 1;
-        segY = (int) Math.ceil(getHeight() - BORDER - BORDER_UP) * 2 / countOfSegmentsY;
+        segX = (int) Math.ceil(getWidth() - BORDER_UP - BORDER - 10) / countOfSegments + 2;
+        segY = (int) Math.ceil(getHeight() - BORDER - BORDER_UP  - 20)/ countOfSegmentsY;
 
         addMouseWheelListener(e -> {
 
-            if (e.getWheelRotation() < 0) {
+            if (e.getWheelRotation() < 0 && getHeight() < 4000) {
                 setSize((int) Math.floor(getWidth() + 20),
                         (int) Math.floor(getHeight() + 20));
                 System.out.println(getWidth());
                 System.out.println(getHeight());
                 setPreferredSize(new Dimension((int) Math.floor(getWidth() + 20),
                         (int) Math.floor(getHeight() + 20)));
-                segX = (int) Math.ceil(getWidth() - BORDER_UP - BORDER) / countOfSegments + 1;
-                segY = (int) Math.ceil(getHeight() - BORDER - BORDER_UP) * 2 / countOfSegmentsY;
+                segX = (int) Math.ceil(getWidth() - BORDER_UP - BORDER - 10) / countOfSegments + 2;
+                segY = (int) Math.ceil(getHeight() - BORDER - BORDER_UP - 20) / countOfSegmentsY;
                 repaint();
             } else if (e.getWheelRotation() > 0 && getHeight() > 448) {
                 setSize((int) Math.floor(getWidth() - 20),
@@ -56,8 +64,8 @@ public class GraphicPanel extends JPanel {
                 System.out.println(getHeight());
                 setPreferredSize(new Dimension((int) Math.floor(getWidth() - 20),
                         (int) Math.floor(getHeight() - 20)));
-                segX = (int) Math.ceil(getWidth() - BORDER_UP - BORDER) / countOfSegments + 1;
-                segY = (int) Math.ceil(getHeight() - BORDER - BORDER_UP) * 2 / countOfSegmentsY;
+                segX = (int) Math.ceil(getWidth() - BORDER_UP - BORDER - 10) / countOfSegments + 2;
+                segY = (int) Math.ceil(getHeight() - BORDER - BORDER_UP - 20) / countOfSegmentsY;
                 repaint();
             }
         });
@@ -86,27 +94,25 @@ public class GraphicPanel extends JPanel {
             g.drawString(Integer.toString(segmentName), x - 5, getHeight() - 4);
             segmentName += zoom;
         }
-        segmentName = zoom / 5;
+        segmentName = coefY;
         for (int y = getHeight() - BORDER - segY; y > BORDER_UP; y -= segY) {
             g.drawLine(BORDER - 5, y, BORDER + 5, y);
             g.drawString(Integer.toString(segmentName), 5, y + 5);
-            segmentName += zoom / 5;
+            segmentName += coefY;
         }
 
         g.drawString("T, мкс", 40, BORDER - 5);
         g.drawString("N", getWidth() - BORDER + 10, getHeight() - 40);
 
         if (!points.isEmpty())
-            for (int i = 0; i < points.size(); i++) {
-                addPoint(points.get(i).getNumberOfElements(), points.get(i).getTime(), g);
+            for (SortingTime point : points) {
+                addPoint(point.getNumberOfElements(), point.getTime(), g);
             }
     }
 
-    public JPanel getPanel() {
+    JPanel getPanel() {
 
         JScrollPane scroll = new JScrollPane(this);
-
-
 
         MyMouseAdapter adapter = new MyMouseAdapter(scroll);
         addMouseListener(adapter);
@@ -120,12 +126,15 @@ public class GraphicPanel extends JPanel {
     private void addPoint(int cordX, int cordY, Graphics g) {
 
         double tempX = cordX * segX / zoom,
-                tempY = cordY * segY * 5 / zoom;
+                tempY = cordY * segY / coefY;
 
         cordX = BORDER + (int) tempX;
         cordY = getHeight() - BORDER - (int) tempY;
 
         g.drawLine(lastX, lastY, cordX, cordY);
+        g.drawLine(cordX, getHeight() - BORDER, cordX, cordY);
+        g.drawLine(BORDER, cordY, cordX, cordY);
+
         g.drawOval(cordX - 2, cordY - 2, 4, 4);
 
         lastX = cordX;

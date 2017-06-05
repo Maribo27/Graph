@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Maria on 22.05.2017.
  */
-public class Table {
+class Table {
     private JPanel tablePanel = new JPanel();
     private List<SortingTime> timeList;
 

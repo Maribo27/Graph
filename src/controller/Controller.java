@@ -12,7 +12,12 @@ public class Controller {
     private Interface view;
     private SortingList model = new SortingList();
 
-    public void updateView() {
+    public void runProgram(){
+        view = new Interface(this);
+        view.runProgram();
+    }
+
+    void updateView() {
         view.updateMainFrame();
     }
 
@@ -21,13 +26,13 @@ public class Controller {
     }
 
     public void generateMassive(int maxNumber, int step){
-        GenerateMassive generateMassive = new GenerateMassive(maxNumber, step);
-        List list = generateMassive.generate();
-        changeData(list);
+        Thread generateMassive = new GenerateMassive(maxNumber, step, this);
+        generateMassive.start();
     }
 
-    public void changeData(List<SortingTime> list) {
+    void changeData(List<SortingTime> list) {
         model.setTimes(list);
-        //updateView();
     }
+
+
 }

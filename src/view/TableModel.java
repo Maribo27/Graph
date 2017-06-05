@@ -12,7 +12,7 @@ public class TableModel extends AbstractTableModel {
 
     private String[] tableHeaders = {"N", "T"};
     private List<SortingTime> times;
-    private static final int NUMBEROFELEMENTS = 0;
+    private static final int NUMBER_OF_ELEMENTS = 0;
     private static final int TIME = 1;
 
     TableModel(List<SortingTime> times){
@@ -46,7 +46,7 @@ public class TableModel extends AbstractTableModel {
         SortingTime time = times.get(rowIndex);
 
         switch (columnIndex) {
-            case NUMBEROFELEMENTS:
+            case NUMBER_OF_ELEMENTS:
                 result = time.getNumberOfElements();
                 break;
             case TIME:
