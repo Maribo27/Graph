@@ -91,33 +91,10 @@ public class Interface {
             controller.generateMassive(numberOfArrays,zoom);
         });
 
-
         JPanel zoomPanel = new JPanel();
         JLabel labelZoomPercentage = new JLabel("0");
-        JButton minusButton = new JButton("-");
-        JButton plusButton = new JButton("+");
-        plusButton.addActionListener((ActionEvent e) -> {
-            if (!minusButton.isEnabled()) minusButton.setEnabled(true);
-            String zooming = labelZoomPercentage.getText();
-            if (zooming.compareTo("90") == 0) plusButton.setEnabled(false);
-            int zoom = Integer.parseInt(zooming) + 10;
-            graphicPanel.changeZoom(zoom);
-            updateMainFrame();
-            labelZoomPercentage.setText(String.valueOf(zoom));
-        });
-        minusButton.addActionListener((ActionEvent e) -> {
-            if (!plusButton.isEnabled()) plusButton.setEnabled(true);
-            String zooming = labelZoomPercentage.getText();
-            if (zooming.compareTo("10") == 0) minusButton.setEnabled(false);
-            int zoom = Integer.parseInt(zooming) - 10;
-            graphicPanel.changeZoom(-zoom);
-            updateMainFrame();
-            labelZoomPercentage.setText(String.valueOf(zoom));
-        });
-        zoomPanel.add(minusButton);
-        zoomPanel.add(labelZoomPercentage);
-        zoomPanel.add(plusButton);
 
+        zoomPanel.add(labelZoomPercentage);
 
         parameterPanel.add(labelZoom);
         parameterPanel.add(textFieldZoom);

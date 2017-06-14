@@ -16,7 +16,7 @@ import static view.Const.*;
 public class GraphicPanel extends JPanel {
 
     private int zoom, lastX, lastY, countOfSegmentsY, countOfSegmentsX;
-    private int segX, segY, coefY = 200;
+    private int segX, segY, coefY = 200, bugaga;
     private List<SortingTime> points;
 
     GraphicPanel(int zoom, List<SortingTime> points, int numberOfArrays, int coefY) {
@@ -29,7 +29,7 @@ public class GraphicPanel extends JPanel {
         countOfSegmentsX = numberOfArrays / this.zoom + 1;
         countOfSegmentsY = 6;
         setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(620, 427));
+        setPreferredSize(new Dimension(620, 427 ));
         setSize(new Dimension(620, 427));
 
         segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
@@ -80,8 +80,6 @@ public class GraphicPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-
-
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
@@ -163,12 +161,11 @@ public class GraphicPanel extends JPanel {
         lastY = cordY;
     }
 
-    void changeZoom(int zoom){
+    void changeZoom(Dimension dimension){
 
-        setSize((int) Math.floor(620 + 2 * zoom),
-                (int) Math.floor(427 + 2 * zoom));
-        setPreferredSize(new Dimension((int) Math.floor(620 + 2 * zoom),
-                (int) Math.floor(427 + 2 * zoom)));
+        setPreferredSize(dimension);
+        setSize(dimension);
+
         segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
         segY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
         repaint();
