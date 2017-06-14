@@ -30,7 +30,7 @@ class Table {
         columnModel.getColumn(1).setMinWidth(65);
 
 
-        JScrollPane scrollPane = new JScrollPane(myTable);
+        JScrollPane scrollPane = new JScrollPane(myTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setPreferredSize(new Dimension(150, 450));
 
         tablePanel.add(scrollPane);

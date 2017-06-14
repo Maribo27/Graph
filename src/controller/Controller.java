@@ -34,5 +34,18 @@ public class Controller {
         model.setTimes(list);
     }
 
+    public int getTimeZoom(){
+        List<SortingTime> time = model.getTimes();
+        int max = 0;
+        for (SortingTime t: time) {
+            if (max < t.getTime()) max = t.getTime();
+        }
+        if (max % 10 != 0){
+            max += 10;
+            max = max / 10;
+            max = max * 10;
+        }
+        return max;
+    }
 
 }

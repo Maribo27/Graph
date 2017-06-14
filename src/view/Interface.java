@@ -35,7 +35,7 @@ public class Interface {
         mainPanel.add(table.getTable(), BorderLayout.WEST);
         mainPanel.add(addParameterPanel(), BorderLayout.SOUTH);
 
-        graphicPanel = new GraphicPanel(10, new ArrayList<>(), 200);
+        graphicPanel = new GraphicPanel(1, new ArrayList<>(), 10, 5);
 
         graphic = graphicPanel.getPanel();
         mainPanel.add(graphic);
@@ -48,8 +48,10 @@ public class Interface {
 
     private JPanel addParameterPanel() {
         JPanel parameterPanel = new JPanel();
-        parameterPanel.setMaximumSize(new Dimension(600, 100));
-        parameterPanel.setLayout(new GridLayout(4, 2));
+        parameterPanel.setMaximumSize(new Dimension(600, 110));
+        parameterPanel.setPreferredSize(new Dimension(600, 110));
+        parameterPanel.setSize(new Dimension(600, 110));
+        parameterPanel.setLayout(new GridLayout(3, 2));
 
         JLabel labelZoom = new JLabel("Кратность масштаба");
         JTextField textFieldZoom = new JTextField();
@@ -76,15 +78,53 @@ public class Interface {
             numberOfArrays = Integer.parseInt(checkNumber);
             zoom = Integer.parseInt(checkZoom);
 
+            if (numberOfArrays / zoom > 20) {
+                int answer = JOptionPane.showConfirmDialog(JOptionPane.getRootFrame(), "Введена слишком маленькая кратность, график будет нечитабельным, вы уверены?", "Ошибка",
+                        JOptionPane.YES_NO_OPTION);
 
+                if (answer == JOptionPane.NO_OPTION)
+                {
+                    textFieldZoom.setText("");
+                    return;
+                }
+            }
             controller.generateMassive(numberOfArrays,zoom);
         });
+
+
+        JPanel zoomPanel = new JPanel();
+        JLabel labelZoomPercentage = new JLabel("0");
+        JButton minusButton = new JButton("-");
+        JButton plusButton = new JButton("+");
+        plusButton.addActionListener((ActionEvent e) -> {
+            if (!minusButton.isEnabled()) minusButton.setEnabled(true);
+            String zooming = labelZoomPercentage.getText();
+            if (zooming.compareTo("90") == 0) plusButton.setEnabled(false);
+            int zoom = Integer.parseInt(zooming) + 10;
+            graphicPanel.changeZoom(zoom);
+            updateMainFrame();
+            labelZoomPercentage.setText(String.valueOf(zoom));
+        });
+        minusButton.addActionListener((ActionEvent e) -> {
+            if (!plusButton.isEnabled()) plusButton.setEnabled(true);
+            String zooming = labelZoomPercentage.getText();
+            if (zooming.compareTo("10") == 0) minusButton.setEnabled(false);
+            int zoom = Integer.parseInt(zooming) - 10;
+            graphicPanel.changeZoom(-zoom);
+            updateMainFrame();
+            labelZoomPercentage.setText(String.valueOf(zoom));
+        });
+        zoomPanel.add(minusButton);
+        zoomPanel.add(labelZoomPercentage);
+        zoomPanel.add(plusButton);
+
 
         parameterPanel.add(labelZoom);
         parameterPanel.add(textFieldZoom);
         parameterPanel.add(labelNumber);
         parameterPanel.add(textFieldNumber);
         parameterPanel.add(buildButton);
+        parameterPanel.add(zoomPanel);
 
         return parameterPanel;
     }
@@ -95,11 +135,12 @@ public class Interface {
         table.updateTable();
         mainPanel.add(table.getTable(), BorderLayout.WEST);
         mainPanel.remove(graphic);
-        graphicPanel = new GraphicPanel(zoom, controller.getModel().getTimes(), numberOfArrays);
+        graphicPanel = new GraphicPanel(zoom, controller.getModel().getTimes(), numberOfArrays, controller.getTimeZoom());
         graphic = graphicPanel.getPanel();
         mainPanel.add(graphic);
 
-        table.updateTable(); mainWindow.repaint();
+        table.updateTable();
+        mainWindow.repaint();
         mainWindow.revalidate();
     }
 

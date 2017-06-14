@@ -28,19 +28,19 @@ class GenerateMassive extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            int averageTime = 0;
+            long averageTime = 0;
             for (int arrayNumber = 0; arrayNumber < 1000; arrayNumber++) {
                 List<Integer> array = generating((countMassive + 1) * step);
-                int timeA = (int) System.nanoTime() / 1000;
+                long timeA = System.nanoTime() / 1000;
                 QSort qSort = new QSort(array);
                 qSort.sort(0, array.size() - 1);
-                int timeB = (int) System.nanoTime() / 1000;
-                int timeDelta = timeB - timeA;
+                long timeB = System.nanoTime() / 1000;
+                long timeDelta = timeB - timeA;
                 averageTime += timeDelta;
             }
             averageTime = averageTime / 1000;
 
-            SortingTime avTime = new SortingTime((countMassive + 1) * step, averageTime);
+            SortingTime avTime = new SortingTime((countMassive + 1) * step, (int) averageTime);
             times.add(avTime);
             controller.changeData(times);
             controller.updateView();
