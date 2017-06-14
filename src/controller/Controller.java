@@ -30,7 +30,7 @@ public class Controller {
         generateMassive.start();
     }
 
-    public void changeButtonState(){
+    void changeButtonState(){
         view.buttonHide();
     }
 
@@ -50,6 +50,10 @@ public class Controller {
             max = max * 10;
         }
         return max;
+    }
+
+    public void changeSize(int width, int height, int sizeCoef){
+        view.changeSize(width, height, sizeCoef);
     }
 
 }

@@ -1,6 +1,6 @@
 package view;
 
-import controller.MyMouseAdapter;
+import controller.Controller;
 import model.SortingTime;
 
 import javax.swing.*;
@@ -15,42 +15,47 @@ import static view.Const.*;
  */
 public class GraphicPanel extends JPanel {
 
-    private int zoom, lastX, lastY, countOfSegmentsY, countOfSegmentsX;
-    private int segX, segY, coefY;
+    private int zoom;
+    private int lastX;
+    private int lastY;
+    private int countOfSegmentsY;
+    private int countOfSegmentsX;
+    private int segX;
+    private int segY;
+    private int coefY;
     private List<SortingTime> points;
+    private Controller controller;
+    private int sizeCoef;
 
-    GraphicPanel(int zoom, List<SortingTime> points, int numberOfArrays, int coefY) {
+    GraphicPanel(int zoom, List<SortingTime> points, int numberOfArrays, int coefY, int width, int height, Controller controller, int sizeCoef) {
 
         setBackground(Color.WHITE);
+        this.sizeCoef = sizeCoef;
+        this.controller = controller;
+        int width1 = width;
+        int height1 = height;
         this.zoom = zoom;
         this.points = points;
         this.coefY = coefY / 5;
+        changeSize(width1, height1);
 
         countOfSegmentsX = numberOfArrays / this.zoom + 1;
         countOfSegmentsY = 6;
-        setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
-        setSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
-
         segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
         segY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
 
         addMouseWheelListener(e -> {
 
             if ((e.getModifiers() & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK){
-                if (e.getWheelRotation() < 0 && getHeight() < 1000) {
-                    setSize((int) Math.floor(getWidth() + 20),
-                            (int) Math.floor(getHeight() + 20));
-                    setPreferredSize(new Dimension((int) Math.floor(getWidth() + 20),
-                            (int) Math.floor(getHeight() + 20)));
+                if (e.getWheelRotation() < 0 && this.sizeCoef < 100) {
+                    this.sizeCoef++;
+                    changeSize(getWidth() + 20, getHeight() + 20);
                     segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
                     segY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
                     repaint();
-                } else if (e.getWheelRotation() > 0 && getHeight() > 427) {
-                    setSize((int) Math.floor(getWidth() - 20),
-                            (int) Math.floor(getHeight() - 20));
-                    setPreferredSize(new Dimension((int) Math.floor(getWidth() - 20),
-                            (int) Math.floor(getHeight() - 20)));
+                } else if (e.getWheelRotation() > 0 && this.sizeCoef > 1) {
+                    this.sizeCoef--;
+                    changeSize(getWidth() - 20, getHeight() - 20);
                     segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
                     segY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
                     repaint();
@@ -58,18 +63,12 @@ public class GraphicPanel extends JPanel {
             }
 
             if ((e.getModifiers() & InputEvent.ALT_MASK) == InputEvent.ALT_MASK){
-                if (e.getWheelRotation() < 0 && getWidth() < 4270) {
-                    setSize((int) Math.floor(getWidth() + 20),
-                            (int) Math.floor(getHeight()));
-                    setPreferredSize(new Dimension((int) Math.floor(getWidth() + 20),
-                            (int) Math.floor(getHeight())));
+                if (e.getWheelRotation() < 0 && getWidth() < 3000) {
+                    changeSize(getWidth() + 20, getHeight());
                     segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
                     repaint();
                 } else if (e.getWheelRotation() > 0 && getWidth() > 620) {
-                    setSize((int) Math.floor(getWidth() - 20),
-                            (int) Math.floor(getHeight()));
-                    setPreferredSize(new Dimension((int) Math.floor(getWidth() - 20),
-                            (int) Math.floor(getHeight())));
+                    changeSize(getWidth() - 20, getHeight());
                     segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
                     repaint();
                 }
@@ -132,15 +131,7 @@ public class GraphicPanel extends JPanel {
     }
 
     JPanel getPanel() {
-
-        JScrollPane scroll = new JScrollPane(this, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        MyMouseAdapter adapter = new MyMouseAdapter(scroll);
-        addMouseListener(adapter);
-        addMouseMotionListener(adapter);
-
-        JPanel panel = new JPanel();
-        panel.add(scroll);
-        return panel;
+        return this;
     }
 
     private void addPoint(int cordX, int cordY, Graphics2D g2) {
@@ -158,5 +149,28 @@ public class GraphicPanel extends JPanel {
         g2.fillOval(cordX - 2, cordY - 2, 4, 4);
         lastX = cordX;
         lastY = cordY;
+    }
+
+    void sizeIncrement(int sign){
+        sizeCoef += sign * 5;
+        changeSize(getWidth() + sign * 100, getHeight() + sign * 100);
+        segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
+        segY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
+        repaint();
+    }
+
+    private void changeSize(int width, int height){
+        setPreferredSize(new Dimension(width, height));
+        setSize(new Dimension(width, height));
+        repaint();
+        controller.changeSize(width, height, this.sizeCoef);
+    }
+
+    void clearScale(){
+        this.sizeCoef = 1;
+        changeSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
+        segY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
+        repaint();
     }
 }
