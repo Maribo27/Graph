@@ -22,9 +22,10 @@ class GenerateMassive extends Thread {
     @Override
     public void run(){
         int ceil = ((int) Math.ceil(maxNumberOfElements / step));
+        controller.changeButtonState();
         for (int countMassive = 0; countMassive < ceil; countMassive++) {
             try {
-                Thread.sleep(300);
+                Thread.sleep(3);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -45,6 +46,7 @@ class GenerateMassive extends Thread {
             controller.changeData(times);
             controller.updateView();
         }
+        controller.changeButtonState();
     }
 
     private List<Integer> generating(int size) {

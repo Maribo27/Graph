@@ -30,6 +30,10 @@ public class Controller {
         generateMassive.start();
     }
 
+    public void changeButtonState(){
+        view.buttonHide();
+    }
+
     void changeData(List<SortingTime> list) {
         model.setTimes(list);
     }

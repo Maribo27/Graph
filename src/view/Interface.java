@@ -18,6 +18,7 @@ public class Interface {
     private JPanel graphic = new JPanel();
     private GraphicPanel graphicPanel;
     private Controller controller;
+    private JButton buildButton;
     private int numberOfArrays, zoom;
 
     public Interface(Controller controller){
@@ -59,7 +60,7 @@ public class Interface {
         JLabel labelNumber = new JLabel("Максимальное число элементов");
         JTextField textFieldNumber = new JTextField();
 
-        JButton buildButton = new JButton("Построить график");
+        buildButton = new JButton("Построить график");
         buildButton.addActionListener((ActionEvent e) -> {
             String checkNumber = textFieldNumber.getText(),
                     checkZoom = textFieldZoom.getText();
@@ -128,5 +129,9 @@ public class Interface {
         mainWindow.pack();
         mainWindow.setResizable(false);
         mainWindow.setEnabled(true);
+    }
+
+    public void buttonHide(){
+        buildButton.setEnabled(!buildButton.isEnabled());
     }
 }

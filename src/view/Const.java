@@ -7,9 +7,6 @@ class Const {
     static final int BORDER = 30;
     static final int BORDER_UP = 2;
     static final int BORDER_SEGMENT = 15;
-    public int bugaga = 0;
-
-    void changeZoom(int number){
-        bugaga = number;
-    }
+    static final int WINDOW_WIDTH = 620;
+    static final int WINDOW_HEIGHT = 427;
 }
