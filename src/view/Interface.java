@@ -58,11 +58,13 @@ public class Interface {
     }
 
     private JPanel addParameterPanel() {
+        JPanel tempPanel = new JPanel();
+        tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.Y_AXIS));
         JPanel parameterPanel = new JPanel();
-        parameterPanel.setMaximumSize(new Dimension(600, 110));
-        parameterPanel.setPreferredSize(new Dimension(600, 110));
-        parameterPanel.setSize(new Dimension(600, 110));
-        parameterPanel.setLayout(new GridLayout(3, 2));
+        parameterPanel.setMaximumSize(new Dimension(600, 50));
+        parameterPanel.setPreferredSize(new Dimension(600, 50));
+        parameterPanel.setSize(new Dimension(600, 50));
+        parameterPanel.setLayout(new GridLayout(2, 2));
         JLabel labelZoom = new JLabel("Кратность масштаба");
         JTextField textFieldZoom = new JTextField();
 
@@ -117,23 +119,25 @@ public class Interface {
 
         scaleButton.addActionListener(e -> graphicPanel.clearScale());
 
+        zoomPanel.add(buildButton);
         zoomPanel.add(minusButton);
         zoomPanel.add(scaleLabel);
         zoomPanel.add(plusButton);
 
         zoomPanel.add(scaleButton);
 
-        JPanel newPanel = new JPanel();
-        newPanel.add(buildButton);
+        //JPanel newPanel = new JPanel();
+        //newPanel.add(buildButton);
 
         parameterPanel.add(labelZoom);
         parameterPanel.add(textFieldZoom);
         parameterPanel.add(labelNumber);
         parameterPanel.add(textFieldNumber);
-        parameterPanel.add(newPanel);
-        parameterPanel.add(zoomPanel);
+        //parameterPanel.add(newPanel);
+        tempPanel.add(parameterPanel);
+        tempPanel.add(zoomPanel);
 
-        return parameterPanel;
+        return tempPanel;
     }
 
     public void updateMainFrame(){

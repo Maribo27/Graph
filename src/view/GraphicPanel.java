@@ -5,7 +5,6 @@ import model.SortingTime;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.InputEvent;
 import java.util.List;
 
 import static view.Const.*;
@@ -15,29 +14,21 @@ import static view.Const.*;
  */
 public class GraphicPanel extends JPanel {
 
-    private int zoom;
-    private int lastX;
-    private int lastY;
-    private int countOfSegmentsY;
-    private int countOfSegmentsX;
-    private int segX;
-    private int segY;
-    private int coefY;
+    private int zoom, lastX, lastY;
+    private int countOfSegmentsY, countOfSegmentsX;
+    private int segX, segY, coefY, sizeCoef, coefX = 1;
     private List<SortingTime> points;
     private Controller controller;
-    private int sizeCoef;
 
     GraphicPanel(int zoom, List<SortingTime> points, int numberOfArrays, int coefY, int width, int height, Controller controller, int sizeCoef) {
 
         setBackground(Color.WHITE);
         this.sizeCoef = sizeCoef;
         this.controller = controller;
-        int width1 = width;
-        int height1 = height;
         this.zoom = zoom;
         this.points = points;
         this.coefY = coefY / 5;
-        changeSize(width1, height1);
+        changeSize(width, height);
 
         countOfSegmentsX = numberOfArrays / this.zoom + 1;
         countOfSegmentsY = 6;
@@ -45,8 +36,7 @@ public class GraphicPanel extends JPanel {
         segY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
 
         addMouseWheelListener(e -> {
-
-            if ((e.getModifiers() & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK){
+            if (e.getModifiers() == Event.CTRL_MASK){
                 if (e.getWheelRotation() < 0 && this.sizeCoef < 100) {
                     this.sizeCoef++;
                     changeSize(getWidth() + 20, getHeight() + 20);
@@ -61,13 +51,14 @@ public class GraphicPanel extends JPanel {
                     repaint();
                 }
             }
-
-            if ((e.getModifiers() & InputEvent.ALT_MASK) == InputEvent.ALT_MASK){
-                if (e.getWheelRotation() < 0 && getWidth() < 3000) {
+            else if (e.getModifiers() == Event.ALT_MASK){
+                if (e.getWheelRotation() < 0 && coefX < 100) {
+                    coefX++;
                     changeSize(getWidth() + 20, getHeight());
                     segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
                     repaint();
-                } else if (e.getWheelRotation() > 0 && getWidth() > 620) {
+                } else if (e.getWheelRotation() > 0 && coefX > 1) {
+                    coefX--;
                     changeSize(getWidth() - 20, getHeight());
                     segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
                     repaint();

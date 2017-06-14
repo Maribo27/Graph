@@ -15,7 +15,7 @@ class Table {
     private List<SortingTime> timeList;
 
     Table(List<SortingTime> timeList) {
-        tablePanel.setPreferredSize(new Dimension(150, 450));
+        tablePanel.setPreferredSize(new Dimension(150, 475));
         this.timeList = timeList;
     }
 
@@ -31,7 +31,7 @@ class Table {
 
 
         JScrollPane scrollPane = new JScrollPane(myTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(150, 450));
+        scrollPane.setPreferredSize(new Dimension(150, 475));
 
         tablePanel.add(scrollPane);
         tablePanel.setVisible(true);
