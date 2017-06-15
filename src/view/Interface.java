@@ -127,7 +127,10 @@ public class Interface {
         minusButton.addActionListener(e -> graphicPanel.sizeIncrement(-1));
         minusButton.setEnabled(false);
         scaleButton = new JButton("Сбросить масштаб");
-        scaleButton.addActionListener(e -> graphicPanel.clearScale());
+        scaleButton.addActionListener(e -> {
+            graphicPanel.clearScale();
+            scaleButton.setEnabled(false);
+        });
         scaleButton.setEnabled(false);
         zoomPercentage = 0;
         scaleLabel = new JLabel("Масштаб: " + zoomPercentage + "%");

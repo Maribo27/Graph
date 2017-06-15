@@ -38,8 +38,9 @@ class GenerateMassive extends Thread {
                 long timeB = System.nanoTime() / 1000;
                 long timeDelta = timeB - timeA;
                 averageTime += timeDelta;
-                System.out.println(arrayNumber);
+                if (arrayNumber % 10 == 0 && arrayNumber > 0) System.out.println(arrayNumber / 10 + "%");
             }
+            System.out.println("100%");
             averageTime = averageTime / 1000;
 
             SortingTime avTime = new SortingTime((countMassive + 1) * step, (int) averageTime);

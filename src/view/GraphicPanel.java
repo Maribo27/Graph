@@ -44,14 +44,14 @@ public class GraphicPanel extends JPanel {
                 if (e.getWheelRotation() < 0 && this.scaleState < 100) {
                     this.scaleState++;
                     changeSize(getWidth() + 20, getHeight() + 20);
-                    segmentX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
-                    segmentY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
+                    segmentX = (getWidth() - BORDER_SEGMENT - BORDER_LEFT) / countOfSegmentsX;
+                    segmentY = (getHeight() - BORDER_SEGMENT - BORDER) / countOfSegmentsY;
                     repaint();
                 } else if (e.getWheelRotation() > 0 && this.scaleState > 1) {
                     this.scaleState--;
                     changeSize(getWidth() - 20, getHeight() - 20);
-                    segmentX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
-                    segmentY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
+                    segmentX = (getWidth() - BORDER_SEGMENT - BORDER_LEFT) / countOfSegmentsX;
+                    segmentY = (getHeight() - BORDER_SEGMENT - BORDER) / countOfSegmentsY;
                     repaint();
                 }
             }
@@ -59,12 +59,12 @@ public class GraphicPanel extends JPanel {
                 if (e.getWheelRotation() < 0 && this.scaleXState < 100) {
                     this.scaleXState++;
                     changeSize(getWidth() + 100, getHeight());
-                    segmentX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
+                    segmentX = (getWidth() - BORDER_SEGMENT - BORDER_LEFT) / countOfSegmentsX;
                     repaint();
                 } else if (e.getWheelRotation() > 0 && this.scaleXState > 1) {
                     this.scaleXState--;
                     changeSize(getWidth() - 100, getHeight());
-                    segmentX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
+                    segmentX = (getWidth() - BORDER_SEGMENT - BORDER_LEFT) / countOfSegmentsX;
                     repaint();
                 }
             }
@@ -158,8 +158,8 @@ public class GraphicPanel extends JPanel {
     void sizeIncrement(int sign){
         scaleState += sign * 5;
         changeSize(getWidth() + sign * 100, getHeight() + sign * 100);
-        segmentX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
-        segmentY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
+        segmentX = (getWidth() - BORDER_SEGMENT - BORDER_LEFT) / countOfSegmentsX;
+        segmentY = (getHeight() - BORDER_SEGMENT - BORDER) / countOfSegmentsY;
         repaint();
     }
 
@@ -173,8 +173,8 @@ public class GraphicPanel extends JPanel {
     void clearScale(){
         this.scaleState = 1;
         changeSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        segmentX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
-        segmentY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
+        segmentX = (getWidth() - BORDER_SEGMENT - BORDER_LEFT) / countOfSegmentsX;
+        segmentY = (getHeight() - BORDER_SEGMENT - BORDER) / countOfSegmentsY;
         repaint();
     }
 }
