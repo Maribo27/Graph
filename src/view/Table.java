@@ -1,26 +1,26 @@
 package view;
 
+import model.SortingTime;
+
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
+import javax.swing.table.*;
 import java.awt.*;
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Created by Maria on 22.05.2017.
  */
 class Table {
     private JPanel tablePanel = new JPanel();
-    private DefaultTableModel tableModel;
+    private List<SortingTime> timeList;
 
-    Table() {
-        tablePanel.setPreferredSize(new Dimension(150, 450));
-        String[] tableHeaders = {"N", "T"};
-        tableModel = new DefaultTableModel(tableHeaders, 0);
+    Table(List<SortingTime> timeList) {
+        tablePanel.setPreferredSize(new Dimension(150, 475));
+        this.timeList = timeList;
     }
 
     void createTable() {
-
+        TableModel tableModel = new TableModel(timeList);
         JTable myTable = new JTable(tableModel);
 
         TableColumnModel columnModel = myTable.getColumnModel();
@@ -30,8 +30,8 @@ class Table {
         columnModel.getColumn(1).setMinWidth(65);
 
 
-        JScrollPane scrollPane = new JScrollPane(myTable);
-        scrollPane.setPreferredSize(new Dimension(150, 450));
+        JScrollPane scrollPane = new JScrollPane(myTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(150, 475));
 
         tablePanel.add(scrollPane);
         tablePanel.setVisible(true);
@@ -42,13 +42,15 @@ class Table {
         return tablePanel;
     }
 
-    void addRow(Vector<Integer> vector) {
-        tableModel.addRow(vector);
-    }
-
     void updateTable() {
         tablePanel.removeAll();
         createTable();
-        tablePanel.updateUI();
+        tablePanel.revalidate();
+        tablePanel.repaint();
+    }
+
+    void changeData(List<SortingTime> data){
+        timeList = data;
+        updateTable();
     }
 }

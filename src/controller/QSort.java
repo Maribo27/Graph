@@ -1,15 +1,15 @@
-package model;
+package controller;
 
-import java.util.Vector;
+import java.util.List;
 
 /**
  * Created by Maria on 22.05.2017.
  */
 class QSort {
 
-    private Vector<Integer> array = new Vector<>();
+    private List<Integer> array;
 
-    QSort(Vector<Integer> array) {
+    QSort(List<Integer> array) {
         this.array = array;
     }
 
@@ -18,17 +18,18 @@ class QSort {
         int leftCounter = left,
                 rightCounter = right,
                 tmp;
-        int centerValue = this.array.elementAt(((left + right) / 2));
+
+        int centerValue = array.get(((left + right) / 2));
 
         while (leftCounter <= rightCounter) {
-            while (this.array.elementAt(leftCounter) < centerValue)
+            while (array.get(leftCounter) < centerValue)
                 leftCounter++;
-            while (this.array.elementAt(rightCounter) > centerValue)
+            while (array.get(rightCounter) > centerValue)
                 rightCounter--;
             if (leftCounter <= rightCounter) {
-                tmp = this.array.elementAt(leftCounter);
-                this.array.setElementAt(this.array.elementAt(rightCounter), leftCounter);
-                this.array.setElementAt(tmp, rightCounter);
+                tmp = array.get(leftCounter);
+                array.set(leftCounter, array.get(rightCounter));
+                array.set(rightCounter, tmp);
                 leftCounter++;
                 rightCounter--;
             }
