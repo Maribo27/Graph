@@ -14,56 +14,61 @@ import static view.Const.*;
  */
 public class GraphicPanel extends JPanel {
 
-    private int zoom, lastX, lastY;
+    private int scaleDimension, lastX, lastY;
     private int countOfSegmentsY, countOfSegmentsX;
-    private int segX, segY, coefY, sizeCoef, coefX = 1;
+    private int segmentX, segmentY, coefficientY, scaleState, scaleXState;
     private List<SortingTime> points;
     private Controller controller;
 
-    GraphicPanel(int zoom, List<SortingTime> points, int numberOfArrays, int coefY, int width, int height, Controller controller, int sizeCoef) {
+    GraphicPanel(int scaleDimension, List<SortingTime> points, int numberOfArrays, int coefficientY, int width, int height, Controller controller, int scaleState, int scaleXState) {
 
         setBackground(Color.WHITE);
-        this.sizeCoef = sizeCoef;
+        this.scaleXState = scaleXState;
+        this.scaleState = scaleState;
         this.controller = controller;
-        this.zoom = zoom;
+        this.scaleDimension = scaleDimension;
         this.points = points;
-        this.coefY = coefY / 5;
+        this.coefficientY = coefficientY / 5;
         changeSize(width, height);
 
-        countOfSegmentsX = numberOfArrays / this.zoom + 1;
-        countOfSegmentsY = 6;
-        segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
-        segY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
+        countOfSegmentsX = numberOfArrays / this.scaleDimension;
+        if (numberOfArrays % this.scaleDimension != 0) countOfSegmentsX++;
+        countOfSegmentsY = 5;
+        if (coefficientY % 5 != 0) countOfSegmentsY++;
+
+        segmentX = (getWidth() - BORDER_SEGMENT - BORDER_LEFT) / countOfSegmentsX;
+        segmentY = (getHeight() - BORDER_SEGMENT - BORDER) / countOfSegmentsY;
 
         addMouseWheelListener(e -> {
             if (e.getModifiers() == Event.CTRL_MASK){
-                if (e.getWheelRotation() < 0 && this.sizeCoef < 100) {
-                    this.sizeCoef++;
+                if (e.getWheelRotation() < 0 && this.scaleState < 100) {
+                    this.scaleState++;
                     changeSize(getWidth() + 20, getHeight() + 20);
-                    segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
-                    segY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
+                    segmentX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
+                    segmentY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
                     repaint();
-                } else if (e.getWheelRotation() > 0 && this.sizeCoef > 1) {
-                    this.sizeCoef--;
+                } else if (e.getWheelRotation() > 0 && this.scaleState > 1) {
+                    this.scaleState--;
                     changeSize(getWidth() - 20, getHeight() - 20);
-                    segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
-                    segY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
+                    segmentX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
+                    segmentY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
                     repaint();
                 }
             }
             else if (e.getModifiers() == Event.ALT_MASK){
-                if (e.getWheelRotation() < 0 && coefX < 100) {
-                    coefX++;
-                    changeSize(getWidth() + 20, getHeight());
-                    segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
+                if (e.getWheelRotation() < 0 && this.scaleXState < 100) {
+                    this.scaleXState++;
+                    changeSize(getWidth() + 100, getHeight());
+                    segmentX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
                     repaint();
-                } else if (e.getWheelRotation() > 0 && coefX > 1) {
-                    coefX--;
-                    changeSize(getWidth() - 20, getHeight());
-                    segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
+                } else if (e.getWheelRotation() > 0 && this.scaleXState > 1) {
+                    this.scaleXState--;
+                    changeSize(getWidth() - 100, getHeight());
+                    segmentX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
                     repaint();
                 }
             }
+            getParent().dispatchEvent(e);
         });
     }
 
@@ -73,51 +78,59 @@ public class GraphicPanel extends JPanel {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        lastX = BORDER;
+        lastX = BORDER_LEFT;
         lastY = getHeight() - BORDER;
 
         g2.setStroke(new BasicStroke(2.0f));
 
-        g2.drawLine(BORDER, BORDER_UP, BORDER, getHeight() - BORDER);
-        g2.drawLine(BORDER, BORDER_UP, BORDER - 5, 12);
-        g2.drawLine(BORDER, BORDER_UP, BORDER + 5, 12);
+        g2.drawLine(BORDER_LEFT, BORDER_UP, BORDER_LEFT, getHeight() - BORDER);
+        g2.drawLine(BORDER_LEFT, BORDER_UP, BORDER_LEFT - 5, 12);
+        g2.drawLine(BORDER_LEFT, BORDER_UP, BORDER_LEFT + 5, 12);
 
-        g2.drawLine(BORDER, getHeight() - BORDER, getWidth() - BORDER_UP, getHeight() - BORDER);
+        g2.drawLine(BORDER_LEFT, getHeight() - BORDER, getWidth() - BORDER_UP, getHeight() - BORDER);
         g2.drawLine(getWidth() - BORDER_UP, getHeight() - BORDER, getWidth() - 12, getHeight() - BORDER + 5);
         g2.drawLine(getWidth() - BORDER_UP, getHeight() - BORDER, getWidth() - 12, getHeight() - BORDER - 5);
 
         float[] dashPattern = {2.0f, 5.0f};
         g2.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10.0f, dashPattern, 0));
-        g2.drawString("0", 18, getHeight() - 14);
-        g2.setStroke(new BasicStroke(2.0f));int segmentName = zoom;
-        for (int countX = 1; countX < countOfSegmentsX; countX++) {
-            int x = BORDER + segX * countX;
+        g2.drawString("0", BORDER_LEFT - 15, getHeight() - BORDER + 15);
+        g2.setStroke(new BasicStroke(2.0f));
+
+        int segmentName = scaleDimension;
+        for (int countX = 1; countX <= countOfSegmentsX; countX++) {
+            int x = BORDER_LEFT + segmentX * countX;
             g2.drawLine(x, getHeight() - BORDER - 5, x, getHeight() - BORDER + 5);
             dashPattern = new float[]{2.0f, 5.0f};
             g2.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10.0f, dashPattern, 0));
             g2.drawLine(x, getHeight() - BORDER, x, BORDER_UP);
             g2.drawString(Integer.toString(segmentName), x - 5, getHeight() - 4);
             g2.setStroke(new BasicStroke(2.0f));
-            segmentName += zoom;
+            segmentName += scaleDimension;
         }
-        segmentName = coefY;
-        for (int countY = 1; countY < countOfSegmentsY; countY++) {
-            int y = getHeight() - BORDER - segY * countY;
-            g2.drawLine(BORDER - 5, y, BORDER + 5, y);
+        segmentName = coefficientY;
+        for (int countY = 1; countY <= countOfSegmentsY; countY++) {
+            int numberDist = (String.valueOf(segmentName).length() + 1) * 10;
+            int y = getHeight() - BORDER - segmentY * countY;
+            g2.drawLine(BORDER_LEFT - 5, y, BORDER_LEFT + 5, y);
             dashPattern = new float[]{2.0f, 5.0f};
             g2.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10.0f, dashPattern, 0));
-            g2.drawLine(BORDER, y, getWidth() - BORDER_UP, y);
-            g2.drawString(Integer.toString(segmentName), 5, y + 5);
+            g2.drawLine(BORDER_LEFT, y, getWidth() - BORDER_UP, y);
+            g2.drawString(Integer.toString(segmentName), BORDER_LEFT - numberDist, y + 5);
             g2.setStroke(new BasicStroke(2.0f));
-            segmentName += coefY;
+            segmentName += coefficientY;
         }
 
-        g2.drawString("T, мкс", 40, BORDER - 5);
-        g2.drawString("N", getWidth() - BORDER + 10, getHeight() - 40);
+        g2.drawString("T, мкс", BORDER_LEFT + 10, BORDER_UP + 15);
+        g2.drawString("N", getWidth() - BORDER_SEGMENT, getHeight() - BORDER - 20);
 
         if (!points.isEmpty())
             for (SortingTime point : points) {
-                addPoint(point.getNumberOfElements(), point.getTime(), g2);
+                try {
+                    addPoint(point.getNumberOfElements(), point.getTime(), g2);
+                }
+                catch (Exception e){
+                    System.out.println("Невозможно добавить данную точку");
+                }
             }
     }
 
@@ -127,10 +140,10 @@ public class GraphicPanel extends JPanel {
 
     private void addPoint(int cordX, int cordY, Graphics2D g2) {
 
-        double tempX = cordX * segX / zoom,
-                tempY = cordY * segY / coefY;
+        double tempX = cordX * segmentX / scaleDimension,
+                tempY = cordY * segmentY / coefficientY;
 
-        cordX = BORDER + (int) tempX;
+        cordX = BORDER_LEFT + (int) tempX;
         cordY = getHeight() - BORDER - (int) tempY;
 
         g2.setColor(new Color (0xFFF4A460, true));
@@ -143,10 +156,10 @@ public class GraphicPanel extends JPanel {
     }
 
     void sizeIncrement(int sign){
-        sizeCoef += sign * 5;
+        scaleState += sign * 5;
         changeSize(getWidth() + sign * 100, getHeight() + sign * 100);
-        segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
-        segY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
+        segmentX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
+        segmentY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
         repaint();
     }
 
@@ -154,14 +167,14 @@ public class GraphicPanel extends JPanel {
         setPreferredSize(new Dimension(width, height));
         setSize(new Dimension(width, height));
         repaint();
-        controller.changeSize(width, height, this.sizeCoef);
+        controller.changeSize(width, height, this.scaleState, this.scaleXState);
     }
 
     void clearScale(){
-        this.sizeCoef = 1;
+        this.scaleState = 1;
         changeSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        segX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
-        segY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
+        segmentX = (getWidth() - BORDER_SEGMENT) / countOfSegmentsX;
+        segmentY = (getHeight() - BORDER_SEGMENT) / countOfSegmentsY;
         repaint();
     }
 }

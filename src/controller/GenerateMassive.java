@@ -12,9 +12,9 @@ class GenerateMassive extends Thread {
     private List<SortingTime> times;
     private Controller controller;
 
-    GenerateMassive(int n, int sh, Controller controller) {
-        this.maxNumberOfElements = n;
-        this.step = sh;
+    GenerateMassive(int maxNumberOfElements, int step, Controller controller) {
+        this.maxNumberOfElements = maxNumberOfElements;
+        this.step = step;
         times = new ArrayList<>();
         this.controller = controller;
     }
@@ -38,6 +38,7 @@ class GenerateMassive extends Thread {
                 long timeB = System.nanoTime() / 1000;
                 long timeDelta = timeB - timeA;
                 averageTime += timeDelta;
+                System.out.println(arrayNumber);
             }
             averageTime = averageTime / 1000;
 

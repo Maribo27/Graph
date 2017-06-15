@@ -40,20 +40,15 @@ public class Controller {
 
     public int getTimeZoom(){
         List<SortingTime> time = model.getTimes();
-        int max = 0;
-        for (SortingTime t: time) {
-            if (max < t.getTime()) max = t.getTime();
+        int maxTime = 0;
+        for (SortingTime iterator: time) {
+            if (maxTime < iterator.getTime()) maxTime = iterator.getTime();
         }
-        if (max % 10 != 0){
-            max += 10;
-            max = max / 10;
-            max = max * 10;
-        }
-        return max;
+        return maxTime;
     }
 
-    public void changeSize(int width, int height, int sizeCoef){
-        view.changeSize(width, height, sizeCoef);
+    public void changeSize(int width, int height, int scaleState, int scaleXState){
+        view.changeSize(width, height, scaleState, scaleXState);
     }
 
 }
