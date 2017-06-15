@@ -28,13 +28,13 @@ public class GraphicPanel extends JPanel {
         this.controller = controller;
         this.scaleDimension = scaleDimension;
         this.points = points;
-        this.coefficientY = coefficientY / 5;
+        if (coefficientY < 10 & coefficientY % 5 != 0) this.coefficientY = 2;
+        else this.coefficientY = coefficientY / 5;
         changeSize(width, height);
 
         countOfSegmentsX = numberOfArrays / this.scaleDimension;
-        if (numberOfArrays % this.scaleDimension != 0) countOfSegmentsX++;
         countOfSegmentsY = 5;
-        if (coefficientY % 5 != 0) countOfSegmentsY++;
+        if (coefficientY > 10 & coefficientY % 5 != 0) countOfSegmentsY++;
 
         segmentX = (getWidth() - BORDER_SEGMENT - BORDER_LEFT) / countOfSegmentsX;
         segmentY = (getHeight() - BORDER_SEGMENT - BORDER) / countOfSegmentsY;
