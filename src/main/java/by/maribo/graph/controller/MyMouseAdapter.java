@@ -1,4 +1,4 @@
-package controller;
+package by.maribo.graph.controller;
 
 import javax.swing.*;
 import java.awt.event.*;
