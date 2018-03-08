@@ -50,5 +50,4 @@ public class Controller {
     public void changeSize(int width, int height, int scaleState, int scaleXState){
         view.changeSize(width, height, scaleState, scaleXState);
     }
-
 }

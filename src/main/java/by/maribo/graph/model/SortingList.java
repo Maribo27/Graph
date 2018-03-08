@@ -19,5 +19,4 @@ public class SortingList {
     public List<SortingTime> getTimes() {
         return timeOfSorting;
     }
-
 }

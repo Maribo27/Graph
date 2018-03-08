@@ -5,6 +5,7 @@ import by.maribo.graph.model.SortingTime;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.util.List;
 
 import static by.maribo.graph.view.Const.*;
@@ -40,7 +41,7 @@ public class GraphicPanel extends JPanel {
         segmentY = (getHeight() - BORDER_SEGMENT - BORDER) / countOfSegmentsY;
 
         addMouseWheelListener(e -> {
-            if (e.getModifiers() == Event.CTRL_MASK){
+            if (e.getModifiers() == InputEvent.CTRL_MASK){
                 if (e.getWheelRotation() < 0 && this.scaleState < 100) {
                     this.scaleState++;
                     changeSize(getWidth() + 20, getHeight() + 20);
@@ -55,7 +56,7 @@ public class GraphicPanel extends JPanel {
                     repaint();
                 }
             }
-            else if (e.getModifiers() == Event.ALT_MASK){
+            else if (e.getModifiers() == InputEvent.ALT_MASK){
                 if (e.getWheelRotation() < 0 && this.scaleXState < 100) {
                     this.scaleXState++;
                     changeSize(getWidth() + 100, getHeight());

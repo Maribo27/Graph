@@ -38,6 +38,5 @@ public class MyMouseAdapter extends MouseAdapter {
     public void mousePressed(MouseEvent e) {
         prevX = e.getX();
         prevY = e.getY();
-
     }
 }
